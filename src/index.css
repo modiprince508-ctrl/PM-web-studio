@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #111111;
+  --color-accent: #3b82f6;
+  --color-background: #faf9f6;
+  --color-surface: #ffffff;
+  
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+:root {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Custom horizontal line animation */
+@keyframes scroll-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: scroll-x 20s linear infinite;
+}
