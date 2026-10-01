@@ -32,7 +32,7 @@ const projects = [
     description: 'An admissions guidance platform designed to simplify the college application journey. The interface presents complex admission data in an easily digestible format, acting as a digital product rather than a standard website.',
     features: ['PRODUCT', 'WEB DESIGN', 'REACT', 'RESPONSIVE'],
     year: '2025',
-    image: '/studentnav.jpg',
+    image: '/studentnav.png',
     layout: 'left'
   },
   {

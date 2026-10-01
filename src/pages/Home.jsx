@@ -29,7 +29,7 @@ const projects = [
     category: 'EdTech / Startup',
     description: 'An admissions guidance platform concept designed to simplify the college admission journey for students.',
     features: ['Modern product UI', 'Guidance-focused UX', 'Responsive design'],
-    image: '/studentnav.jpg',
+    image: '/studentnav.png',
   },
   {
     id: '03',
