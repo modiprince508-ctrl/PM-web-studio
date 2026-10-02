@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, MapPin, MessageCircle, Send, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const FadeIn = ({ children, delay = 0, className = "" }) => (
@@ -15,6 +16,28 @@ const FadeIn = ({ children, delay = 0, className = "" }) => (
   </motion.div>
 );
 
+const serviceToBudget = {
+  "Website Design": "₹5,000–₹10,000",
+  "Landing Page Design": "₹5,000–₹10,000",
+  "Full Website Design": "₹5,000–₹10,000",
+  "Working Website Development": "₹5,000–₹10,000",
+  "Working Landing Page": "₹5,000–₹10,000",
+  "Website Redesign": "₹5,000–₹10,000",
+  "Premium Digital Experiences": "₹10,000–₹20,000",
+  "Website Maintenance": "₹5,000–₹10,000",
+};
+
+const servicePricing = {
+  "Website Design": { price: "₹4,999", type: "starting" },
+  "Landing Page Design": { price: "₹4,999", type: "starting" },
+  "Full Website Design": { price: "₹7,999", type: "starting" },
+  "Working Website Development": { price: "₹7,999", type: "starting" },
+  "Working Landing Page": { price: "₹4,999", type: "starting" },
+  "Website Redesign": { price: "₹7,999", type: "starting" },
+  "Premium Digital Experiences": { price: "₹12,999+", type: "starting" },
+  "Website Maintenance": { type: "custom" }
+};
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
@@ -26,6 +49,31 @@ export default function Contact() {
     message: ''
   });
 
+  const [popupInfo, setPopupInfo] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const serviceParam = params.get('service');
+    if (serviceParam) {
+      setTimeout(() => {
+        setFormData(prev => ({ 
+          ...prev, 
+          service: serviceParam,
+          budget: serviceToBudget[serviceParam] || prev.budget 
+        }));
+        
+        const priceInfo = servicePricing[serviceParam];
+        if (priceInfo) {
+          setPopupInfo({ service: serviceParam, ...priceInfo });
+          setShowPopup(true);
+        }
+      }, 0);
+    }
+  }, [location.search]);
+
   const [honeypot, setHoneypot] = useState('');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,17 +81,37 @@ export default function Contact() {
   const [submitError, setSubmitError] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+    const { name, value } = e.target;
+    
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      
+      // Auto budget selection
+      if (name === 'service' && serviceToBudget[value]) {
+        updated.budget = serviceToBudget[value];
+      }
+      return updated;
+    });
+
+    if (name === 'service') {
+      const priceInfo = servicePricing[value];
+      if (priceInfo) {
+        setPopupInfo({ service: value, ...priceInfo });
+        setShowPopup(true);
+      } else {
+        setShowPopup(false);
+      }
+    }
+
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleWhatsAppChange = (e) => {
-    // Only allow digits and max 10
     const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-    setFormData({ ...formData, whatsapp: value });
-    if (errors.whatsapp) setErrors({ ...errors, whatsapp: '' });
+    setFormData(prev => ({ ...prev, whatsapp: value }));
+    if (errors.whatsapp) setErrors(prev => ({ ...prev, whatsapp: '' }));
   };
 
   const validate = () => {
@@ -53,6 +121,13 @@ export default function Contact() {
       newErrors.name = "Please enter your name.";
     } else if (nameStr.length > 100) {
       newErrors.name = "Name is too long.";
+    }
+    
+    const bizStr = formData.businessName.trim();
+    if (!bizStr) {
+      newErrors.businessName = "Please enter your business or brand name.";
+    } else if (bizStr.length > 150) {
+      newErrors.businessName = "Business name is too long.";
     }
     
     const emailStr = formData.email.trim();
@@ -71,11 +146,19 @@ export default function Contact() {
       newErrors.whatsapp = "Enter a valid 10-digit Indian mobile number.";
     }
 
-    const validServices = ["Landing Page", "Business Website", "Premium Digital Experiences", "Website Redesign", "Other"];
+    const validServices = [
+      "Website Design", "Landing Page Design", "Full Website Design", 
+      "Working Website Development", "Working Landing Page", "Website Redesign", 
+      "Premium Digital Experiences", "Website Maintenance", "Other"
+    ];
     if (!formData.service) {
       newErrors.service = "Please select a service.";
     } else if (!validServices.includes(formData.service)) {
       newErrors.service = "Invalid service selection.";
+    }
+
+    if (!formData.budget) {
+      newErrors.budget = "Please select a budget.";
     }
 
     const msgStr = formData.message.trim();
@@ -94,13 +177,11 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Honeypot check for bots
     if (honeypot) {
-      setIsSuccess(true); // Fake success for bots
+      setIsSuccess(true);
       return;
     }
 
-    // Rate limiting check
     const lastSubmit = localStorage.getItem('lastEnquiryTime');
     const now = Date.now();
     if (lastSubmit && now - parseInt(lastSubmit) < 60000) {
@@ -119,11 +200,11 @@ export default function Contact() {
         .insert([
           {
             name: formData.name.trim(),
-            business_name: formData.businessName.trim().slice(0, 150) || null,
+            business_name: formData.businessName.trim().slice(0, 150),
             email: formData.email.trim(),
             whatsapp: `+91${formData.whatsapp}`,
             service: formData.service,
-            budget: formData.budget || null,
+            budget: formData.budget,
             message: formData.message.trim(),
             status: 'New'
           }
@@ -133,6 +214,7 @@ export default function Contact() {
       
       localStorage.setItem('lastEnquiryTime', now.toString());
       setIsSuccess(true);
+      setShowPopup(false);
     } catch (err) {
       console.error('Error submitting enquiry:', err);
       setSubmitError('Something went wrong while sending your enquiry. Please try again.');
@@ -154,11 +236,12 @@ export default function Contact() {
     setErrors({});
     setIsSuccess(false);
     setSubmitError(null);
+    setShowPopup(false);
   };
 
   const handleWhatsApp = () => {
     const text = encodeURIComponent(`Hi PM Web Studio, I'm interested in starting a project. Could we discuss?`);
-    window.open(`https://wa.me/910000000000?text=${text}`, '_blank');
+    window.open(`https://wa.me/919227114454?text=${text}`, '_blank');
   };
 
   const inputClasses = (fieldName) => `
@@ -169,7 +252,6 @@ export default function Contact() {
 
   return (
     <div className="bg-[#faf9f6] text-[#111] overflow-hidden min-h-screen">
-      {/* Background System */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-grid-pattern opacity-60"></div>
         <div className="hidden md:flex absolute inset-0 justify-between px-6 md:px-12 w-full max-w-7xl mx-auto opacity-[0.03]">
@@ -184,8 +266,6 @@ export default function Contact() {
         <div className="container mx-auto px-6 md:px-12">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-            
-            {/* Left: Editorial / Contact Info */}
             <div className="lg:col-span-5 flex flex-col">
               <FadeIn>
                 <div className="inline-flex items-center gap-2 mb-8">
@@ -204,16 +284,16 @@ export default function Contact() {
                     <div className="text-sm font-semibold tracking-wide uppercase text-gray-400 w-24 shrink-0 pt-1">WhatsApp</div>
                     <div>
                       <div className="text-lg font-medium group-hover:text-gray-500 transition-colors flex items-center gap-2">
-                        Start a chat <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                        +91 9227114454 <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                       </div>
                     </div>
                   </button>
 
-                  <a href="mailto:hello@example.com" className="flex items-start gap-4 group">
+                  <a href="mailto:modiprince@gmail.com" className="flex items-start gap-4 group">
                     <div className="text-sm font-semibold tracking-wide uppercase text-gray-400 w-24 shrink-0 pt-1">Email</div>
                     <div>
                       <div className="text-lg font-medium group-hover:text-gray-500 transition-colors">
-                        hello@example.com
+                        modiprince@gmail.com
                       </div>
                     </div>
                   </a>
@@ -230,11 +310,8 @@ export default function Contact() {
               </FadeIn>
             </div>
 
-            {/* Right: Form */}
             <div className="lg:col-span-7">
               <FadeIn delay={0.1}>
-
-
                 <div className="bg-white p-8 md:p-12 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden">
                   <AnimatePresence mode="wait">
                     {isSuccess ? (
@@ -270,7 +347,6 @@ export default function Contact() {
                         noValidate
                         className="space-y-8"
                       >
-                        {/* Honeypot field for bots */}
                         <div style={{ display: 'none' }} aria-hidden="true">
                           <input type="text" name="hp_field" tabIndex="-1" autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
                         </div>
@@ -290,15 +366,16 @@ export default function Contact() {
                           </div>
                           
                           <div className="relative group">
-                            <label htmlFor="businessName" className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 absolute -top-4 left-0 transition-colors group-focus-within:text-black">Business / Brand Name</label>
+                            <label htmlFor="businessName" className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 absolute -top-4 left-0 transition-colors group-focus-within:text-black">Business / Brand Name *</label>
                             <input 
                               type="text" id="businessName" name="businessName"
                               value={formData.businessName} onChange={handleChange}
                               className={inputClasses('businessName')}
-                              placeholder="Acme Corp (Optional)"
+                              placeholder="Acme Corp"
                               disabled={isSubmitting}
                               maxLength={150}
                             />
+                            {errors.businessName && <div className="absolute -bottom-5 left-0 text-xs text-red-500 flex items-center gap-1"><AlertCircle size={12}/>{errors.businessName}</div>}
                           </div>
                         </div>
 
@@ -309,7 +386,7 @@ export default function Contact() {
                               type="email" id="email" name="email"
                               value={formData.email} onChange={handleChange}
                               className={inputClasses('email')}
-                              placeholder="john@example.com"
+                              placeholder="yourname@gmail.com"
                               disabled={isSubmitting}
                               maxLength={254}
                             />
@@ -343,29 +420,39 @@ export default function Contact() {
                               disabled={isSubmitting}
                             >
                               <option value="" disabled>Select a service</option>
-                              <option value="Landing Page">Landing Page</option>
-                              <option value="Business Website">Business Website</option>
-                              <option value="Premium Digital Experiences">Premium Digital Experiences</option>
+                              <option value="Website Design">Website Design</option>
+                              <option value="Landing Page Design">Landing Page Design</option>
+                              <option value="Full Website Design">Full Website Design</option>
+                              <option value="Working Website Development">Working Website Development</option>
+                              <option value="Working Landing Page">Working Landing Page</option>
                               <option value="Website Redesign">Website Redesign</option>
+                              <option value="Premium Digital Experiences">Premium Digital Experiences</option>
+                              <option value="Website Maintenance">Website Maintenance</option>
                               <option value="Other">Other</option>
                             </select>
                             {errors.service && <div className="absolute -bottom-5 left-0 text-xs text-red-500 flex items-center gap-1"><AlertCircle size={12}/>{errors.service}</div>}
                           </div>
                           
                           <div className="relative group">
-                            <label htmlFor="budget" className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 absolute -top-4 left-0 transition-colors group-focus-within:text-black">Budget</label>
+                            <label htmlFor="budget" className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 absolute -top-4 left-0 transition-colors group-focus-within:text-black">Budget *</label>
                             <select 
                               id="budget" name="budget"
                               value={formData.budget} onChange={handleChange}
                               className={`${inputClasses('budget')} appearance-none bg-transparent cursor-pointer ${!formData.budget ? 'text-gray-400' : 'text-[#111]'}`}
                               disabled={isSubmitting}
                             >
-                              <option value="" disabled>Select budget (Optional)</option>
+                              <option value="" disabled>Select budget</option>
                               <option value="₹5,000–₹10,000">₹5,000 – ₹10,000</option>
                               <option value="₹10,000–₹20,000">₹10,000 – ₹20,000</option>
                               <option value="₹20,000–₹50,000">₹20,000 – ₹50,000</option>
                               <option value="₹50,000+">₹50,000+</option>
                             </select>
+                            {formData.budget && !errors.budget && (
+                              <div className="absolute -bottom-5 left-0 text-[10px] text-gray-400 flex items-center gap-1 transition-opacity">
+                                You can change this budget.
+                              </div>
+                            )}
+                            {errors.budget && <div className="absolute -bottom-5 left-0 text-xs text-red-500 flex items-center gap-1"><AlertCircle size={12}/>{errors.budget}</div>}
                           </div>
                         </div>
 
@@ -410,7 +497,6 @@ export default function Contact() {
               </FadeIn>
             </div>
             
-            {/* Mobile Contact Info */}
             <div className="lg:hidden col-span-1 border-t border-gray-200 pt-16">
               <FadeIn>
                  <div className="space-y-8">
@@ -418,16 +504,16 @@ export default function Contact() {
                     <div className="text-sm font-semibold tracking-wide uppercase text-gray-400 w-24 shrink-0 pt-1">WhatsApp</div>
                     <div>
                       <div className="text-lg font-medium group-hover:text-gray-500 transition-colors flex items-center gap-2">
-                        Start a chat <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                        +91 9227114454 <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                       </div>
                     </div>
                   </button>
 
-                  <a href="mailto:hello@example.com" className="flex items-start gap-4 group">
+                  <a href="mailto:modiprince@gmail.com" className="flex items-start gap-4 group">
                     <div className="text-sm font-semibold tracking-wide uppercase text-gray-400 w-24 shrink-0 pt-1">Email</div>
                     <div>
                       <div className="text-lg font-medium group-hover:text-gray-500 transition-colors">
-                        hello@example.com
+                        modiprince@gmail.com
                       </div>
                     </div>
                   </a>
@@ -447,6 +533,64 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Pricing Information Popup */}
+      <AnimatePresence>
+        {showPopup && popupInfo && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 w-[calc(100%-3rem)] md:w-[400px] bg-[#111] text-white p-6 rounded-2xl shadow-2xl border border-gray-800"
+          >
+            <button 
+              onClick={() => setShowPopup(false)} 
+              className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+            
+            <div className="pr-6">
+              <div className="inline-flex items-center gap-2 mb-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div>
+                <span className="text-[9px] tracking-[0.2em] uppercase font-bold text-gray-400">Pricing Info</span>
+              </div>
+              
+              <h4 className="text-xl font-bold mb-4 leading-tight">
+                {popupInfo.service} <br/>
+                <span className="text-gray-400 font-normal text-lg">
+                  {popupInfo.type === 'custom' ? 'Custom Quote' : `Starting from ${popupInfo.price}`}
+                </span>
+              </h4>
+              
+              {popupInfo.type === 'custom' ? (
+                <p className="text-gray-400 text-sm leading-relaxed mb-6 font-light">
+                  Maintenance requirements vary from project to project.
+                  Tell us what you need and we'll discuss the right scope and pricing with you.
+                </p>
+              ) : (
+                <>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-3 font-light">
+                    This is our starting price for this service. Final pricing depends on your project requirements and scope.
+                  </p>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-6 font-light">
+                    Need something different? You can change your budget below or contact our owner directly for a custom quote.
+                  </p>
+                </>
+              )}
+              
+              <button 
+                onClick={handleWhatsApp}
+                className="inline-flex items-center gap-2 text-sm font-semibold tracking-wide border-b border-gray-600 hover:border-white pb-1 transition-colors"
+              >
+                Contact Owner <ArrowRight size={14} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

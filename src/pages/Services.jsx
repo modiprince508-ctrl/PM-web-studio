@@ -26,10 +26,9 @@ const ShowcaseWrapper = ({ id, children }) => (
   </div>
 );
 
-const LandingPagePreview = () => {
+const LandingPagePreview = ({ id = "02" }) => {
   return (
-    <ShowcaseWrapper id="01">
-      {/* Mobile view (Background left) */}
+    <ShowcaseWrapper id={id}>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -46,7 +45,6 @@ const LandingPagePreview = () => {
         </div>
       </motion.div>
 
-      {/* Main Hero Screen (Center) */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +65,6 @@ const LandingPagePreview = () => {
         </div>
       </motion.div>
 
-      {/* Features Screen (Top Right) */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -90,7 +87,6 @@ const LandingPagePreview = () => {
         </div>
       </motion.div>
 
-      {/* Dark CTA Screen (Bottom Right) */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -107,10 +103,9 @@ const LandingPagePreview = () => {
   );
 };
 
-const BusinessWebsitePreview = () => {
+const BusinessWebsitePreview = ({ id = "01" }) => {
   return (
-    <ShowcaseWrapper id="02">
-      {/* Background large image-heavy screen (Architecture/About) */}
+    <ShowcaseWrapper id={id}>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -129,7 +124,6 @@ const BusinessWebsitePreview = () => {
         </div>
       </motion.div>
 
-      {/* Main Home Screen */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -137,7 +131,6 @@ const BusinessWebsitePreview = () => {
         className="relative z-20 w-[240px] md:w-[300px] bg-white border border-gray-200/80 rounded shadow-[0_30px_70px_rgba(0,0,0,0.12)] overflow-hidden pointer-events-auto mt-8 md:mt-0"
         whileHover={{ scale: 1.02 }}
       >
-        {/* Nav */}
         <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white">
           <div className="text-[10px] font-bold tracking-widest text-[#111]">ARCHETYPE</div>
           <div className="flex gap-2">
@@ -146,7 +139,6 @@ const BusinessWebsitePreview = () => {
             <div className="w-3 h-0.5 bg-gray-300"></div>
           </div>
         </div>
-        {/* Hero */}
         <div className="p-6 md:p-8 bg-gray-50 flex flex-col justify-end h-[160px] md:h-[200px] relative overflow-hidden border-b border-gray-100">
            <div className="absolute right-0 top-0 w-40 h-40 bg-gray-200/50 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2"></div>
            <div className="text-2xl md:text-3xl font-serif font-medium text-[#111] leading-tight mb-3 relative z-10">Building spaces<br/>for tomorrow.</div>
@@ -158,7 +150,6 @@ const BusinessWebsitePreview = () => {
         </div>
       </motion.div>
 
-      {/* Services Screen */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -179,7 +170,6 @@ const BusinessWebsitePreview = () => {
         </div>
       </motion.div>
 
-      {/* Contact floating card */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -196,10 +186,136 @@ const BusinessWebsitePreview = () => {
   );
 };
 
+const FullWebsiteDesignPreview = () => (
+  <ShowcaseWrapper id="03">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6 }}
+      className="relative z-20 w-[280px] md:w-[380px] bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden pointer-events-auto flex"
+      whileHover={{ y: -5, scale: 1.02 }}
+    >
+      <div className="w-[60px] md:w-[80px] bg-gray-50 border-r border-gray-100 p-3 flex flex-col gap-3">
+        <div className="w-6 h-6 rounded-full bg-[#111] mb-2"></div>
+        <div className="w-full h-1.5 bg-gray-300 rounded-full"></div>
+        <div className="w-3/4 h-1.5 bg-gray-200 rounded-full"></div>
+        <div className="w-5/6 h-1.5 bg-gray-200 rounded-full"></div>
+        <div className="w-full h-1.5 bg-gray-200 rounded-full"></div>
+      </div>
+      
+      <div className="flex-1 p-4 bg-white flex flex-col gap-3 relative">
+        <div className="absolute right-0 top-0 w-24 h-24 bg-orange-50 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="w-1/2 h-2.5 bg-gray-800 rounded-full mb-1"></div>
+        <div className="w-full h-1.5 bg-gray-200 rounded-full"></div>
+        <div className="w-4/5 h-1.5 bg-gray-200 rounded-full mb-2"></div>
+        
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          <div className="h-16 bg-gray-50 border border-gray-100 rounded-md"></div>
+          <div className="h-16 bg-gray-50 border border-gray-100 rounded-md"></div>
+          <div className="h-16 bg-gray-50 border border-gray-100 rounded-md"></div>
+          <div className="h-16 bg-gray-50 border border-gray-100 rounded-md"></div>
+        </div>
+      </div>
+    </motion.div>
+  </ShowcaseWrapper>
+);
+
+const DevelopmentPreview = () => (
+  <ShowcaseWrapper id="04">
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="relative z-20 w-[260px] md:w-[360px] bg-[#0d1117] border border-gray-800 rounded-xl shadow-2xl overflow-hidden pointer-events-auto"
+      whileHover={{ scale: 1.02 }}
+    >
+      <div className="px-4 py-3 border-b border-gray-800 flex justify-between items-center bg-[#161b22]">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+        </div>
+        <div className="text-[10px] text-gray-400 font-mono">App.jsx</div>
+        <div></div>
+      </div>
+      <div className="p-5 font-mono text-[10px] md:text-[11px] leading-relaxed text-gray-300">
+        <div className="text-purple-400">import <span className="text-blue-400">React</span> from <span className="text-green-400">'react'</span>;</div>
+        <div className="text-purple-400">import <span className="text-blue-400">{`{ useState }`}</span> from <span className="text-green-400">'react'</span>;</div>
+        <br/>
+        <div><span className="text-purple-400">export default function</span> <span className="text-yellow-200">ProductionBuild</span>() {`{`}</div>
+        <div className="pl-4"><span className="text-purple-400">return</span> (</div>
+        <div className="pl-8 text-gray-400">&lt;<span className="text-blue-300">div</span> <span className="text-blue-200">className</span>=<span className="text-green-400">"w-full h-screen"</span>&gt;</div>
+        <div className="pl-12 text-gray-400">&lt;<span className="text-blue-300">InteractiveComponent</span> /&gt;</div>
+        <div className="pl-12 text-gray-400">&lt;<span className="text-blue-300">APIIntegration</span> /&gt;</div>
+        <div className="pl-8 text-gray-400">&lt;/<span className="text-blue-300">div</span>&gt;</div>
+        <div className="pl-4">);</div>
+        <div>{`}`}</div>
+      </div>
+    </motion.div>
+  </ShowcaseWrapper>
+);
+
+const RedesignPreview = () => (
+  <ShowcaseWrapper id="06">
+    <div className="flex items-center justify-center gap-4 md:gap-8 z-20 pointer-events-auto">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-[120px] md:w-[160px] h-[200px] md:h-[240px] bg-gray-50 border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col p-3 opacity-60 grayscale"
+      >
+        <div className="text-[8px] font-bold text-gray-400 mb-2">BEFORE</div>
+        <div className="w-full h-8 bg-gray-200 rounded-sm mb-3"></div>
+        <div className="w-3/4 h-2 bg-gray-200 rounded-full mb-1"></div>
+        <div className="w-1/2 h-2 bg-gray-200 rounded-full mb-4"></div>
+        <div className="grid grid-cols-1 gap-2">
+          <div className="w-full h-12 bg-gray-200 rounded-sm"></div>
+          <div className="w-full h-12 bg-gray-200 rounded-sm"></div>
+        </div>
+      </motion.div>
+      
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-[#111] shrink-0"
+      >
+        <ArrowRight size={14} />
+      </motion.div>
+
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="w-[140px] md:w-[180px] h-[220px] md:h-[260px] bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+        whileHover={{ scale: 1.05 }}
+      >
+        <div className="px-3 py-2 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+          <div className="text-[8px] font-bold text-green-600 tracking-wider">AFTER</div>
+          <div className="flex gap-1"><div className="w-1 h-1 rounded-full bg-gray-300"></div><div className="w-1 h-1 rounded-full bg-gray-300"></div></div>
+        </div>
+        <div className="p-3 bg-gray-50 flex flex-col items-center justify-center h-20 border-b border-gray-100">
+           <div className="text-[12px] font-serif font-bold text-[#111] mb-1">Elevated.</div>
+           <div className="w-12 py-1 bg-[#111] text-white text-[5px] text-center rounded-full">DISCOVER</div>
+        </div>
+        <div className="p-3 flex-1 bg-white grid grid-cols-1 gap-2">
+           <div className="w-full h-10 bg-white border border-gray-100 shadow-sm rounded-lg flex items-center px-2 gap-2">
+             <div className="w-4 h-4 bg-blue-50 rounded flex items-center justify-center"><div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div></div>
+             <div className="w-12 h-1 bg-gray-200 rounded-full"></div>
+           </div>
+           <div className="w-full h-10 bg-white border border-gray-100 shadow-sm rounded-lg flex items-center px-2 gap-2">
+             <div className="w-4 h-4 bg-purple-50 rounded flex items-center justify-center"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div></div>
+             <div className="w-8 h-1 bg-gray-200 rounded-full"></div>
+           </div>
+        </div>
+      </motion.div>
+    </div>
+  </ShowcaseWrapper>
+);
+
 const PremiumDigitalPreview = () => {
   return (
-    <ShowcaseWrapper id="03">
-      {/* Dark mode / technical screen (Top Left) */}
+    <ShowcaseWrapper id="07">
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -226,7 +342,6 @@ const PremiumDigitalPreview = () => {
         </div>
       </motion.div>
 
-      {/* Main Glassmorphic Dashboard (Center) */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -234,7 +349,6 @@ const PremiumDigitalPreview = () => {
         className="relative z-20 w-[260px] md:w-[380px] bg-white/95 backdrop-blur-xl border border-white/60 shadow-[0_40px_80px_rgba(0,0,0,0.12)] rounded-xl overflow-hidden pointer-events-auto flex flex-col md:flex-row mt-12 md:mt-0"
         whileHover={{ scale: 1.02 }}
       >
-        {/* Sidebar */}
         <div className="md:w-16 bg-gray-50/80 border-r border-gray-100 flex md:flex-col items-center justify-between p-4 shrink-0 hidden sm:flex">
           <div className="w-6 h-6 bg-[#111] rounded-lg shadow-md"></div>
           <div className="flex flex-col gap-4">
@@ -247,7 +361,6 @@ const PremiumDigitalPreview = () => {
           <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 mt-auto border border-gray-200"></div>
         </div>
         
-        {/* Main Content */}
         <div className="flex-1 p-5 md:p-6 relative bg-white/50">
           <div className="text-[14px] md:text-[18px] font-bold text-[#111] tracking-tight mb-5">System Overview</div>
           <div className="grid grid-cols-2 gap-3 mb-5">
@@ -275,7 +388,6 @@ const PremiumDigitalPreview = () => {
         </div>
       </motion.div>
 
-      {/* Floating Card (Bottom Right) */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -297,8 +409,7 @@ const PremiumDigitalPreview = () => {
 
 const WebsiteMaintenancePreview = () => {
   return (
-    <ShowcaseWrapper id="04">
-      {/* Background Code / Log Screen */}
+    <ShowcaseWrapper id="08">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -318,7 +429,6 @@ const WebsiteMaintenancePreview = () => {
         <div className="text-[8px] md:text-[9px] font-mono text-blue-400 mt-2">&gt; 0 threats found. System secure.</div>
       </motion.div>
 
-      {/* Main Status Dashboard */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -364,7 +474,6 @@ const WebsiteMaintenancePreview = () => {
         </div>
       </motion.div>
 
-      {/* Floating Alert Screen */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -387,32 +496,68 @@ const WebsiteMaintenancePreview = () => {
 const services = [
   {
     id: '01',
-    title: 'Landing Pages',
-    desc: 'Focused, high-converting pages designed around one clear business goal. Ideal for marketing campaigns, product launches, or specific service offerings.',
-    preview: <LandingPagePreview />,
-    features: ['High-conversion design', 'Fast load times', 'Clear call-to-actions', 'Mobile optimized'],
+    title: 'Website Design',
+    type: 'DESIGN ONLY',
+    desc: 'Professional UI/UX design for modern businesses. We design clean, responsive layouts optimized for desktop and mobile, with a strong focus on conversion.',
+    preview: <BusinessWebsitePreview id="01" />,
+    features: ['UI/UX design', 'Modern responsive layouts', 'Desktop + mobile design', 'Conversion-focused sections'],
   },
   {
     id: '02',
-    title: 'Business Websites',
-    desc: 'Professional multi-page websites that establish credibility and make it easy for customers to contact you. The foundation of your online presence.',
-    preview: <BusinessWebsitePreview />,
-    features: ['Custom design', 'Service pages', 'About & Contact', 'SEO optimized'],
+    title: 'Landing Page Design',
+    type: 'DESIGN ONLY',
+    desc: 'High-impact landing page design tailored for products, services, or marketing campaigns. We create CTA-focused layouts that drive action.',
+    preview: <LandingPagePreview id="02" />,
+    features: ['High-impact landing page design', 'Product/service landing pages', 'Responsive design', 'CTA-focused layouts'],
   },
   {
     id: '03',
-    title: 'Premium Digital Experiences',
-    desc: 'Custom-designed experiences with advanced interactions, animations and polished UI. For businesses that want to stand out from the competition.',
-    preview: <PremiumDigitalPreview />,
-    features: ['Framer Motion animations', 'Advanced UI components', 'Custom illustrations', 'Premium typography'],
+    title: 'Full Website Design',
+    type: 'DESIGN ONLY',
+    desc: 'Complete multi-page website design featuring custom layouts and a consistent visual system tailored specifically to your brand identity.',
+    preview: <FullWebsiteDesignPreview />,
+    features: ['Complete multi-page website design', 'Custom page layouts', 'Responsive design', 'Consistent visual system'],
   },
   {
     id: '04',
-    title: 'Website Maintenance',
-    desc: 'Updates, improvements and ongoing technical support to keep your website fast, secure, and up-to-date.',
-    preview: <WebsiteMaintenancePreview />,
-    features: ['Content updates', 'Performance monitoring', 'Security checks', 'Priority support'],
+    title: 'Working Website Development',
+    type: 'DESIGN + DEVELOPMENT',
+    desc: 'We bring designs to life with modern frontend development. Expect a fully functional, production-ready website with interactive components and working forms.',
+    preview: <DevelopmentPreview />,
+    features: ['Fully functional website', 'Modern frontend development', 'Responsive behavior', 'Production-ready implementation'],
   },
+  {
+    id: '05',
+    title: 'Working Landing Page',
+    type: 'DESIGN + DEVELOPMENT',
+    desc: 'A complete end-to-end landing page solution. From high-conversion design to fully functional CTAs, forms, and production deployment.',
+    preview: <LandingPagePreview id="05" />,
+    features: ['Landing page design + development', 'Functional CTAs', 'Forms/interactions', 'Production-ready'],
+  },
+  {
+    id: '06',
+    title: 'Website Redesign',
+    type: 'DESIGN + DEVELOPMENT',
+    desc: 'Modernize your existing website. We improve the underlying structure, enhance usability, and overhaul the UI/UX for a better user experience.',
+    preview: <RedesignPreview />,
+    features: ['Modernize existing websites', 'UI/UX improvements', 'Responsive improvements', 'Structure and usability improvements'],
+  },
+  {
+    id: '07',
+    title: 'Premium Digital Experiences',
+    type: 'DESIGN + DEVELOPMENT',
+    desc: 'Custom-designed experiences with advanced interactions, fluid motion, and polished custom interfaces built for modern web applications.',
+    preview: <PremiumDigitalPreview />,
+    features: ['Advanced interactions', 'Motion/animation', 'Custom interfaces', 'Product/web-app style experiences'],
+  },
+  {
+    id: '08',
+    title: 'Website Maintenance',
+    type: 'MAINTENANCE & SUPPORT',
+    desc: 'Ongoing support to keep your digital presence secure and up-to-date. Includes website updates, bug fixes, and minor UI improvements.',
+    preview: <WebsiteMaintenancePreview />,
+    features: ['Website updates', 'Bug fixes', 'Minor UI improvements', 'Ongoing maintenance/support'],
+  }
 ];
 
 export default function Services() {
@@ -437,15 +582,22 @@ export default function Services() {
       {/* Services List */}
       <section className="py-24 md:py-32 bg-white">
         <div className="container mx-auto px-6 md:px-12">
-          <div className="space-y-24">
+          <div className="space-y-32 md:space-y-40">
             {services.map((service, index) => (
               <FadeIn key={service.id} delay={0}>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center group">
                   <div className={`lg:col-span-5 ${index % 2 !== 0 ? 'lg:order-2' : 'lg:order-1'}`}>
-                    <div className="text-[#111] font-mono text-sm tracking-[0.2em] mb-8 flex items-center gap-4">
+                    <div className="text-[#111] font-mono text-sm tracking-[0.2em] mb-4 flex items-center gap-4">
                       <span className="w-8 h-px bg-gray-300 group-hover:bg-black transition-colors duration-500"></span>
                       {service.id}
                     </div>
+                    
+                    <div className="mb-6">
+                      <span className={`inline-block px-3 py-1 text-[9px] font-bold tracking-widest uppercase rounded-sm border ${service.type.includes('DEVELOPMENT') ? 'border-[#111] bg-[#111] text-white' : (service.type.includes('MAINTENANCE') ? 'border-gray-300 bg-gray-100 text-gray-700' : 'border-gray-200 bg-gray-50 text-gray-500')}`}>
+                        {service.type}
+                      </span>
+                    </div>
+
                     <h2 className="text-4xl md:text-5xl font-bold mb-8 leading-[1.1] tracking-tight">{service.title}</h2>
                     <p className="text-xl text-gray-600 font-light leading-relaxed mb-10">
                       {service.desc}
@@ -454,8 +606,8 @@ export default function Services() {
                     <ul className="space-y-4 mb-12">
                       {service.features.map(feature => (
                         <li key={feature} className="flex items-center gap-3 text-gray-800">
-                          <CheckCircle2 size={18} className="text-gray-300 group-hover:text-black transition-colors duration-500" />
-                          <span className="font-medium tracking-wide">{feature}</span>
+                          <CheckCircle2 size={18} className="text-gray-300 group-hover:text-black transition-colors duration-500 shrink-0" />
+                          <span className="font-medium tracking-wide leading-snug">{feature}</span>
                         </li>
                       ))}
                     </ul>

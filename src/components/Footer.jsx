@@ -33,13 +33,12 @@ export default function Footer() {
           <div className="md:col-span-4 lg:col-span-4">
             <h4 className="text-xs font-semibold tracking-widest text-gray-500 uppercase mb-8">Connect</h4>
             <ul className="flex flex-col gap-4">
-              <li><span className="text-gray-500 text-sm font-medium">LinkedIn (Coming Soon)</span></li>
-              <li><span className="text-gray-500 text-sm font-medium">Twitter / X (Coming Soon)</span></li>
-              <li><span className="text-gray-500 text-sm font-medium">GitHub (Coming Soon)</span></li>
+              <li><a href="https://www.linkedin.com/in/prince-modi-b63809411/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">LinkedIn</a></li>
+              <li><a href="https://github.com/modiprince508-ctrl" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">GitHub</a></li>
             </ul>
             <div className="mt-8">
-              <a href="mailto:hello@pmwebstudio.com" className="inline-flex items-center gap-2 text-white border-b border-gray-700 hover:border-white pb-1 transition-colors text-sm font-medium">
-                hello@pmwebstudio.com
+              <a href="mailto:modiprince@gmail.com" className="inline-flex items-center gap-2 text-white border-b border-gray-700 hover:border-white pb-1 transition-colors text-sm font-medium">
+                modiprince@gmail.com
               </a>
             </div>
           </div>
